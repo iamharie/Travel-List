@@ -1,17 +1,21 @@
 import { useState } from "react";
 
-const demoItems = [
-  { id: 1, name: "ICX-8200-x", packed: true },
-  { id: 2, name: "ICX-8200-y", packed: false },
-  { id: 3, name: "ICX-8200-z", packed: true },
-];
+// const demoItems = [
+//   { id: 1, name: "ICX-8200-x", packed: true },
+//   { id: 2, name: "ICX-8200-y", packed: false },
+//   { id: 3, name: "ICX-8200-z", packed: true },
+// ];
 
 export default function App() {
+  const [items, setItems] = useState([]);
+  function handleItems(item) {
+    setItems((items) => [...items, item]);
+  }
   return (
     <div className="app">
       <Logo />
-      <Form />
-      <PackingList />
+      <Form onAddItems={handleItems} />
+      <PackingList items={items} />
       <Stats />
     </div>
   );
@@ -21,7 +25,7 @@ function Logo() {
   return <h1>TSR Tool</h1>;
 }
 
-function Form() {
+function Form({ onAddItems }) {
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState(1);
 
@@ -32,6 +36,8 @@ function Form() {
   function selectQTY(e) {
     setQuantity(e.target.value);
   }
+
+  //Add button
   function handleSubmit(e) {
     e.preventDefault();
 
@@ -40,14 +46,16 @@ function Form() {
     //creating a new item
     const newItem = { description, quantity, id: Date.now(), packed: false };
     console.log(newItem);
-
+    onAddItems(newItem);
     setDescription("");
     setQuantity("");
   }
 
   return (
     <form className="add-form" onSubmit={handleSubmit}>
-      <h3>Reserve the Serial Numbers</h3>
+      <h3>
+        Please select <em>Network & Console</em> port
+      </h3>
       <select value={quantity} onChange={selectQTY}>
         {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
           <option value={num} key={num}>
@@ -57,7 +65,7 @@ function Form() {
       </select>
       <input
         type="text"
-        placeholder="items..."
+        placeholder="Serial Number"
         value={description}
         onChange={textField}
       ></input>
@@ -66,12 +74,12 @@ function Form() {
   );
 }
 
-function PackingList() {
+function PackingList({ items }) {
   return (
     <div className="list">
       <ul>
-        {demoItems.map((mov) => (
-          <Item item={mov} key={mov.id} />
+        {items.map((item) => (
+          <Item item={item} key={item.id} />
         ))}
       </ul>
     </div>
@@ -82,10 +90,10 @@ function Item({ item }) {
   return (
     <div>
       <li>
-        <span style={!item.packed ? { textDecoration: "line-through" } : {}}>
-          {item.id} {item.name}
+        <span style={item.packed ? { textDecoration: "line-through" } : {}}>
+          {item.quantity} {item.description}
         </span>
-        <buton>❌</buton>
+        <button>❌</button>
       </li>
     </div>
   );
