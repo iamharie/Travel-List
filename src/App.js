@@ -126,10 +126,13 @@ function Item({ item, onDeleteItem, onToggleItem }) {
 }
 function Stats({ items }) {
   const numItems = items.length;
+  const numPacked = items.filter((item) => item.packed).length;
 
   return (
     <footer className="stats">
-      <em>Total: {numItems}</em>
+      <em>
+        Total: {numItems} {numPacked}
+      </em>
     </footer>
   );
 }
