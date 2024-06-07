@@ -8,6 +8,7 @@ import { useState } from "react";
 
 export default function App() {
   const [items, setItems] = useState([]);
+
   function handleItems(item) {
     setItems((items) => [...items, item]);
   }
@@ -31,7 +32,7 @@ export default function App() {
         onDeleteItem={handleDeleteItem}
         onToggleItem={handleToggleItem}
       />
-      <Stats />
+      <Stats items={items} />
     </div>
   );
 }
@@ -123,10 +124,12 @@ function Item({ item, onDeleteItem, onToggleItem }) {
     </div>
   );
 }
-function Stats() {
+function Stats({ items }) {
+  const numItems = items.length;
+
   return (
     <footer className="stats">
-      <em>Logic and condition TBD</em>
+      <em>Total: {numItems}</em>
     </footer>
   );
 }
